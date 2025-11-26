@@ -63,6 +63,13 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final width = MediaQuery.of(context).size.width;
+
+    final bool isTablet = width > 600;
+    final bool isDesktop = width > 1000;
+
+    // Responsive multipliers
+    double scale = (width / 400).clamp(0.8, 1.4);
 
     return FadeTransition(
       opacity: _fadeIn,
@@ -71,16 +78,19 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
         child: AnimatedContainer(
           duration: widget.duration,
           curve: Curves.easeInOut,
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          margin: EdgeInsets.symmetric(
+            horizontal: 12 * scale,
+            vertical: 6 * scale,
+          ),
           decoration: BoxDecoration(
             color: _expanded
                 ? theme.colorScheme.primary.withOpacity(0.06)
                 : theme.cardColor,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(14 * scale),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.03),
-                blurRadius: 8,
+                blurRadius: 8 * scale,
                 offset: const Offset(0, 4),
               ),
             ],
@@ -88,69 +98,85 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14 * scale),
               onTap: () {
                 _toggleExpanded();
                 widget.onTap?.call();
               },
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12 * scale,
+                  vertical: 10 * scale,
                 ),
                 child: Row(
                   children: [
+                    // Responsive leading widget
                     if (widget.leading != null)
                       Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: Hero(
-                          tag: widget.key ?? UniqueKey(),
-                          child: SizedBox(
-                            width: 48,
-                            height: 48,
-                            child: widget.leading,
-                          ),
+                        padding: EdgeInsets.only(right: 12 * scale),
+                        child: SizedBox(
+                          width: isTablet ? 60 : 48 * scale,
+                          height: isTablet ? 60 : 48 * scale,
+                          child: widget.leading!,
                         ),
                       ),
 
+                    // Text section
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           DefaultTextStyle(
-                            style: theme.textTheme.titleMedium!,
+                            style: theme.textTheme.titleMedium!.copyWith(
+                              fontSize: theme.textTheme.titleMedium!.fontSize! *
+                                  scale,
+                            ),
                             child: widget.title,
                           ),
 
+                          // Subtitle with animation
                           AnimatedSize(
                             duration: widget.duration,
                             curve: Curves.easeInOut,
                             child: widget.subtitle != null
                                 ? Padding(
-                                    padding: const EdgeInsets.only(top: 6),
+                                    padding: EdgeInsets.only(top: 6 * scale),
                                     child: DefaultTextStyle(
-                                      style: theme.textTheme.bodySmall!,
+                                      style:
+                                          theme.textTheme.bodySmall!.copyWith(
+                                        fontSize: theme.textTheme.bodySmall!
+                                                .fontSize! *
+                                            scale,
+                                      ),
                                       child: widget.subtitle!,
                                     ),
                                   )
                                 : const SizedBox.shrink(),
                           ),
 
+                          // Expand section
                           AnimatedCrossFade(
                             firstChild: const SizedBox.shrink(),
                             secondChild: Padding(
-                              padding: const EdgeInsets.only(top: 10),
+                              padding: EdgeInsets.only(top: 10 * scale),
                               child: Row(
                                 children: [
                                   Icon(
                                     Icons.info_outline,
-                                    size: 16,
+                                    size: 16 * scale,
                                     color: theme.hintColor,
                                   ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    'Tap again to collapse — this is the expanded area with any extra widget you want.',
-                                    style: theme.textTheme.bodySmall,
+                                  SizedBox(width: 6 * scale),
+                                  Expanded(
+                                    child: Text(
+                                      'Tap again to collapse — this is the expanded area with any extra widget you want.',
+                                      style:
+                                          theme.textTheme.bodySmall!.copyWith(
+                                        fontSize: theme.textTheme.bodySmall!
+                                                .fontSize! *
+                                            scale,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -166,13 +192,14 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
 
                     if (widget.badge != null)
                       Padding(
-                        padding: const EdgeInsets.only(right: 8),
+                        padding: EdgeInsets.only(right: 8 * scale),
                         child: widget.badge!,
                       ),
 
                     _TrailingIcon(
                       expanded: _expanded,
                       duration: widget.duration,
+                      scale: scale,
                     ),
                   ],
                 ),
@@ -186,10 +213,15 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
 }
 
 class _TrailingIcon extends StatelessWidget {
-  const _TrailingIcon({required this.expanded, required this.duration});
+  const _TrailingIcon({
+    required this.expanded,
+    required this.duration,
+    required this.scale,
+  });
 
   final bool expanded;
   final Duration duration;
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
@@ -199,79 +231,20 @@ class _TrailingIcon extends StatelessWidget {
       curve: Curves.easeInOut,
       child: AnimatedContainer(
         duration: duration,
-        padding: const EdgeInsets.all(6),
+        padding: EdgeInsets.all(6 * scale),
         decoration: BoxDecoration(
-          color: Theme.of(
-            context,
-          ).colorScheme.primary.withOpacity(expanded ? 0.12 : 0.0),
+          color: Theme.of(context)
+              .colorScheme
+              .primary
+              .withOpacity(expanded ? 0.12 : 0),
           shape: BoxShape.circle,
         ),
         child: Icon(
           Icons.chevron_right_rounded,
-          size: 22,
+          size: 22 * scale,
           color: Theme.of(context).colorScheme.primary,
         ),
       ),
-    );
-  }
-}
-
-void main() {
-  runApp(const DemoApp());
-}
-
-class DemoApp extends StatelessWidget {
-  const DemoApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Animated ListTile Demo',
-      theme: ThemeData.light(),
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Animated Unique ListTile')),
-        body: const DemoList(),
-      ),
-    );
-  }
-}
-
-class DemoList extends StatelessWidget {
-  const DemoList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final items = List.generate(10, (i) => 'Item #${i + 1}');
-
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final title = items[index];
-
-        return AnimatedUniqueListTile(
-          key: ValueKey(title),
-          leading: CircleAvatar(child: Text('${index + 1}')),
-          title: Text(title),
-          subtitle: Text('Subtitle for $title'),
-          badge: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.redAccent,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Text(
-              'NEW',
-              style: TextStyle(color: Colors.white, fontSize: 12),
-            ),
-          ),
-          onTap: () {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Tapped $title')));
-          },
-        );
-      },
     );
   }
 }

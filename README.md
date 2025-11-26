@@ -26,7 +26,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  list_tile_package:
+  list_tile:
     path: ./list_tile_package
 ```
 
