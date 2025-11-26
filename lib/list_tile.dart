@@ -1,15 +1,7 @@
- 
- 
- 
- 
- 
-library animated_list_tile_package;
+library list_tile_package;
 
 import 'package:flutter/material.dart';
 
-
- 
- 
 class AnimatedUniqueListTile extends StatefulWidget {
   const AnimatedUniqueListTile({
     super.key,
@@ -46,10 +38,7 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
     super.initState();
     _expanded = widget.initiallyExpanded;
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
+    _controller = AnimationController(vsync: this, duration: widget.duration);
 
     _slideIn = Tween<Offset>(
       begin: const Offset(0, 0.12),
@@ -58,7 +47,6 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
 
     _fadeIn = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
-     
     _controller.forward();
   }
 
@@ -85,14 +73,16 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
           curve: Curves.easeInOut,
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: _expanded ? theme.colorScheme.primary.withOpacity(0.06) : theme.cardColor,
+            color: _expanded
+                ? theme.colorScheme.primary.withOpacity(0.06)
+                : theme.cardColor,
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.03),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: Material(
@@ -104,7 +94,10 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
                 widget.onTap?.call();
               },
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 child: Row(
                   children: [
                     if (widget.leading != null)
@@ -112,11 +105,14 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
                         padding: const EdgeInsets.only(right: 12),
                         child: Hero(
                           tag: widget.key ?? UniqueKey(),
-                          child: SizedBox(width: 48, height: 48, child: widget.leading),
+                          child: SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: widget.leading,
+                          ),
                         ),
                       ),
 
-                     
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +122,6 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
                             child: widget.title,
                           ),
 
-                           
                           AnimatedSize(
                             duration: widget.duration,
                             curve: Curves.easeInOut,
@@ -141,14 +136,17 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
                                 : const SizedBox.shrink(),
                           ),
 
-                           
                           AnimatedCrossFade(
                             firstChild: const SizedBox.shrink(),
                             secondChild: Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: Row(
                                 children: [
-                                  Icon(Icons.info_outline, size: 16, color: theme.hintColor),
+                                  Icon(
+                                    Icons.info_outline,
+                                    size: 16,
+                                    color: theme.hintColor,
+                                  ),
                                   const SizedBox(width: 6),
                                   Text(
                                     'Tap again to collapse — this is the expanded area with any extra widget you want.',
@@ -157,22 +155,25 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
                                 ],
                               ),
                             ),
-                            crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                            crossFadeState: _expanded
+                                ? CrossFadeState.showSecond
+                                : CrossFadeState.showFirst,
                             duration: widget.duration,
                           ),
                         ],
                       ),
                     ),
 
-                     
                     if (widget.badge != null)
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: widget.badge!,
                       ),
 
-                     
-                    _TrailingIcon(expanded: _expanded, duration: widget.duration),
+                    _TrailingIcon(
+                      expanded: _expanded,
+                      duration: widget.duration,
+                    ),
                   ],
                 ),
               ),
@@ -200,7 +201,9 @@ class _TrailingIcon extends StatelessWidget {
         duration: duration,
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary.withOpacity(expanded ? 0.12 : 0.0),
+          color: Theme.of(
+            context,
+          ).colorScheme.primary.withOpacity(expanded ? 0.12 : 0.0),
           shape: BoxShape.circle,
         ),
         child: Icon(
@@ -213,9 +216,6 @@ class _TrailingIcon extends StatelessWidget {
   }
 }
 
- 
-
- 
 void main() {
   runApp(const DemoApp());
 }
@@ -228,9 +228,9 @@ class DemoApp extends StatelessWidget {
     return MaterialApp(
       title: 'Animated ListTile Demo',
       theme: ThemeData.light(),
-      home: const Scaffold(
-        appBar: AppBar(title: Text('Animated Unique ListTile')),
-        body: DemoList(),
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Animated Unique ListTile')),
+        body: const DemoList(),
       ),
     );
   }
@@ -260,11 +260,15 @@ class DemoList extends StatelessWidget {
               color: Colors.redAccent,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Text('NEW', style: TextStyle(color: Colors.white, fontSize: 12)),
+            child: const Text(
+              'NEW',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
           ),
           onTap: () {
-             
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Tapped $title')));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Tapped $title')));
           },
         );
       },
