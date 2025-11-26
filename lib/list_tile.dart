@@ -66,7 +66,6 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
     final width = MediaQuery.of(context).size.width;
 
     final bool isTablet = width > 600;
-    final bool isDesktop = width > 1000;
 
     // Responsive multipliers
     double scale = (width / 400).clamp(0.8, 1.4);
@@ -84,12 +83,12 @@ class _AnimatedUniqueListTileState extends State<AnimatedUniqueListTile>
           ),
           decoration: BoxDecoration(
             color: _expanded
-                ? theme.colorScheme.primary.withOpacity(0.06)
+                ? theme.colorScheme.primary
                 : theme.cardColor,
             borderRadius: BorderRadius.circular(14 * scale),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.03),
+                color: Colors.black,
                 blurRadius: 8 * scale,
                 offset: const Offset(0, 4),
               ),
@@ -235,8 +234,7 @@ class _TrailingIcon extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context)
               .colorScheme
-              .primary
-              .withOpacity(expanded ? 0.12 : 0),
+              .primary,
           shape: BoxShape.circle,
         ),
         child: Icon(
