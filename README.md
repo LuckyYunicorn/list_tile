@@ -1,71 +1,62 @@
-# Animated Unique ListTile Package
+# README
 
-This package provides a customizable animated ListTile widget (`AnimatedUniqueListTile`) that includes:
+## Animated Unique ListTile
 
-* Entrance animation (fade + slide)
-* Expand/Collapse interaction
-* Animated trailing icon rotation
-* Optional subtitle with animated size
-* Optional badge widget
-* Customizable leading widget with Hero animation
-* Clean, modern UI design
+A customizable and beautifully animated ListTile widget for Flutter.
+This widget adds:
 
-An example demo is included showing how to use the widget inside a simple list.
+* Slide & fade-in initial animation
+* Expand/collapse behavior
+* Animated subtitle & details
+* Optional badge
+* Leading widget with Hero animation
+* Smooth rotation trailing chevron
+* Fully customizable appearance
 
-## Features
+### Features
 
-* ⚡ Smooth entrance animation
-* 📌 Expand/collapse extra content
-* 🔄 Animated trailing icon
-* 🎖 Optional badge support
-* 🎨 Works with light/dark themes
+* 🚀 Smooth entrance animations
+* 📦 Drop-in replacement for ListTile
+* 🎨 Works with Material You themes
+* 🔧 Supports badges, subtitles, hero leading icons, expanded section
 
-## Usage
+### Installation
 
-### Import
+Add this to your `pubspec.yaml`:
 
-```dart
-import 'package:your_package_name/animated_list_tile.dart';
+```yaml
+dependencies:
+  list_tile_package:
+    path: ./list_tile_package
 ```
 
-### Example
+### Usage
 
 ```dart
 AnimatedUniqueListTile(
-  title: Text('Example Item'),
-  subtitle: Text('Subtitle here'),
-  leading: Icon(Icons.star),
+  leading: CircleAvatar(child: Text('1')),
+  title: Text('Title'),
+  subtitle: Text('Subtitle'),
   badge: Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     decoration: BoxDecoration(
-      color: Colors.redAccent,
+      color: Colors.red,
       borderRadius: BorderRadius.circular(12),
     ),
-    child: const Text('NEW', style: TextStyle(color: Colors.white)),
+    child: Text('NEW', style: TextStyle(color: Colors.white)),
   ),
   onTap: () {
-    print('Tapped!');
+    print('Tapped');
   },
 )
 ```
 
-## Running the Demo
+### Example Project
 
-The file contains a minimal `main()` showcasing the animated tiles:
+The included `main()` demonstrates how to display a list of animated tiles.
 
-```dart
-void main() => runApp(const DemoApp());
-```
+### License
 
-## Requirements
+See the LICENSE file below.
 
-* Flutter 3.0+
-* Dart 2.17+
-
-## Contributing
-
-Pull requests and improvements are welcome!
-
-## License
-
-This package is distributed under the MIT License. See the `LICENSE` file for details.
+---
